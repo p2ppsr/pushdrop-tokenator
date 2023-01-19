@@ -1,12 +1,12 @@
 # pushdrop-tokenator
 
 ## Overview
+
 A Tokenator for Exchanging PushDrop Tokens P2P
 
 ## Example Usage
 
 This example demonstrates sending and receiving PushDrop tokens with pushdrop-tokenator
-
 
 ```js
 const PushDropTokenator = require('pushdrop-tokenator')
@@ -26,7 +26,7 @@ const init = async () => {
     })
     // Send a PushDrop token using Babbage
     await tokenator.sendPushDropToken({
-        recipient: johnSmith, // Required
+        recipient: johnSmith,
         title: 'Example token with a title',
         contents: 'You can include any data you want inside this object.'
         htmlCode: '<html><body><h1>PUSHDROP TOKEN</h1></body></html>'
@@ -79,7 +79,7 @@ Extends the Tokenator class to enable sending PushDrop tokens with custom instru
 
 *   `data` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** The data object with any data fields to send
 
-    *   `data.recipient` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Who this data should be sent to
+    *   `data.recipient` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Who this data should be sent to (optional, default `'self'`)
 
 #### sendPushDropToken
 
@@ -89,7 +89,7 @@ Sends a PushDrop token to a PeerServ recipient
 
 *   `data` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** The data object with any data fields to send
 
-    *   `data.recipient` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Who this data should be sent to (optional) (optional, default `'self'`)
+    *   `data.recipient` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Who this data should be sent to (optional, default `'self'`)
 
 #### receivePushDropTokens
 

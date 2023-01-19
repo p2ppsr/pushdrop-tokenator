@@ -35,7 +35,7 @@ class PushDropTokenator extends Tokenator {
 
   /**
    * @param {Object} data The data object with any data fields to send
-   * @param {String} data.recipient Who this data should be sent to
+   * @param {String} [data.recipient='self'] Who this data should be sent to
    * @returns
    */
   async createPushDropToken (data) {
@@ -100,7 +100,7 @@ class PushDropTokenator extends Tokenator {
   /**
    * Sends a PushDrop token to a PeerServ recipient
    * @param {Object} data The data object with any data fields to send
-   * @param {String} [data.recipient='self'] Who this data should be sent to (optional)
+   * @param {String} [data.recipient='self'] Who this data should be sent to
    */
   async sendPushDropToken (data) {
     const token = await this.createPushDropToken(data)
