@@ -7,7 +7,7 @@ PushDropTokenator is a specialized derived class of Tokenator that enables the c
 
 Developers can easily use PushDropTokenator as a base class and derive specialized class with new functionalty for dealing with a particular token type. For example, EmailTokenator is a class that is derived from PushDropTokenator for sending and receiving email tokens peer-to-peer. ScribeTokenator is another example for exchanging Scribe notes
 
-PushDropTokenator is a powerful tool for creating Bitcoin powered applications that involve the transfer of digital assets. It is an excellent example of how Tokenator's base-level class can be extended to create specialized tokens that solve real-world problems. With PushDropTokenator, users can efficiently and securely share and transfer ownership of any type of digital asset.
+PushDropTokenator is a powerful tool for creating Bitcoin powered applications that involve the transfer of digital assets. It is an excellent example of how Tokenator's base-level class can be extended to create specialized tokens that solve real-world problems.
 
 ## Example Usage
 
