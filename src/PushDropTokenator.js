@@ -5,7 +5,7 @@ const pushdrop = require('pushdrop')
 
 /**
  * Extends the Tokenator class to enable sending PushDrop tokens with custom instructions Peer-to-Peer
- * @param {object} obj All parameters are given in an object
+ * @param {object} [obj] All parameters are given in an object
  * @param {String} [obj.peerServHost] The PeerServ host you want to connect to
  * @param {String} [obj.dojoHost] The Dojo to use for UTXO management
  * @param {String} [obj.clientPrivateKey] A private key to use for mutual authentication with Authrite. (Optional - Defaults to Babbage signing strategy).
@@ -116,7 +116,6 @@ class PushDropTokenator extends Tokenator {
     const tokens = messages.map(x => JSON.parse(x.body))
 
     // Figure out what the signing strategy should be
-    // Note: Should this be refactored to be part of Ninja?
     const getLib = () => {
       if (!this.clientPrivateKey) {
         return BabbageSDK

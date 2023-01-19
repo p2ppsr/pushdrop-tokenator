@@ -1,8 +1,13 @@
 # pushdrop-tokenator
 
-## Overview
-
 A Tokenator for Exchanging PushDrop Tokens P2P
+
+## Overview
+PushDropTokenator is a specialized derived class of Tokenator that enables the creation and transfer of Bitcoin tokens with arbitrary signed payloads stored on the stack. These tokens can be used to represent and transfer ownership of any type of digital asset, such as files, text, images, videos, and more.
+
+Developers can easily use PushDropTokenator as a base class and derive specialized class with new functionalty for dealing with a particular token type. For example, EmailTokenator is a class that is derived from PushDropTokenator for sending and receiving email tokens peer-to-peer. ScribeTokenator is another example for exchanging Scribe notes
+
+PushDropTokenator is a powerful tool for creating Bitcoin powered applications that involve the transfer of digital assets. It is an excellent example of how Tokenator's base-level class can be extended to create specialized tokens that solve real-world problems. With PushDropTokenator, users can efficiently and securely share and transfer ownership of any type of digital asset.
 
 ## Example Usage
 
@@ -28,7 +33,7 @@ const init = async () => {
     await tokenator.sendPushDropToken({
         recipient: johnSmith,
         title: 'Example token with a title',
-        contents: 'You can include any data you want inside this object.'
+        contents: 'You can include any data you want inside this object.',
         htmlCode: '<html><body><h1>PUSHDROP TOKEN</h1></body></html>'
     })
 
