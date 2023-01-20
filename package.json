@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@babbage/sdk": "^0.4.20",
+    "@babbage/tokenator": "^0.1.0",
     "pushdrop": "^0.1.11",
     "utxoninja": "^0.2.47"
   }
