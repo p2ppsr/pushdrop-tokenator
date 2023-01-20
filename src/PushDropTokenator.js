@@ -66,8 +66,6 @@ class PushDropTokenator extends Tokenator {
       outputs: [{
         satoshis: Number(this.defaultTokenValue),
         script: bitcoinOutputScript,
-        // basket: STANDARD_PUSHDROP_BASKET,
-        // customInstructions (if outgoing basket is desired)
         description: `New ${this.protocolID} token`
       }],
       description: `Create a ${this.protocolID}  token`
@@ -123,8 +121,7 @@ class PushDropTokenator extends Tokenator {
       const ninja = new Ninja({
         privateKey: this.clientPrivateKey,
         config: {
-          // dojoURL: this.dojoHost
-          dojoURL: 'http://localhost:3102'
+          dojoURL: this.dojoHost
         }
       })
       return ninja
