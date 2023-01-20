@@ -3,7 +3,7 @@ const path = require('path')
 
 module.exports = {
   entry: {
-    PaymentTokenator: './src/PushDropTokenator.js'
+    PushDropTokenator: './src/PushDropTokenator.js'
   },
   output: {
     globalObject: 'this',
