@@ -110,7 +110,7 @@ class PushDropTokenator extends Tokenator {
    * @returns {Array} An array indicating the tokens received
    */
   async receivePushDropTokens () {
-    const messages = await this.listMessages({ messageBox: [this.protocolMessageBox] })
+    const messages = await this.listMessages({ messageBox: this.protocolMessageBox })
     const tokens = messages.map(x => JSON.parse(x.body))
 
     // Figure out what the signing strategy should be
