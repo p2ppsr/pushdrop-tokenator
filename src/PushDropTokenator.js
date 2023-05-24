@@ -147,7 +147,7 @@ class PushDropTokenator extends Tokenator {
             counterparty: out.customInstructions.sender,
             forSelf: true
           })
-          const result = await pushdrop.decode({
+          const result = pushdrop.decode({
             script: out.customInstructions.outputScript
           })
 
