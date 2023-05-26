@@ -3,6 +3,7 @@
 A Tokenator for Exchanging PushDrop Tokens P2P
 
 ## Overview
+
 PushDropTokenator is a specialized derived class of Tokenator that enables the creation and transfer of Bitcoin tokens with arbitrary signed payloads stored on the stack. These tokens can be used to represent and transfer ownership of any type of digital asset, such as files, text, images, videos, and more.
 
 Developers can easily use PushDropTokenator as a base class and derive specialized class with new functionalty for dealing with a particular token type. For example, EmailTokenator is a class that is derived from PushDropTokenator for sending and receiving email tokens peer-to-peer. ScribeTokenator is another example for exchanging Scribe notes
@@ -54,8 +55,10 @@ init()
     *   [Parameters](#parameters)
     *   [createPushDropToken](#createpushdroptoken)
         *   [Parameters](#parameters-1)
-    *   [sendPushDropToken](#sendpushdroptoken)
+    *   [redeemPushDropToken](#redeempushdroptoken)
         *   [Parameters](#parameters-2)
+    *   [sendPushDropToken](#sendpushdroptoken)
+        *   [Parameters](#parameters-3)
     *   [receivePushDropTokens](#receivepushdroptokens)
 
 ### PushDropTokenator
@@ -66,12 +69,12 @@ Extends the Tokenator class to enable sending PushDrop tokens with custom instru
 
 #### Parameters
 
-*   `obj` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** All parameters are given in an object (optional, default `{}`)
+*   `obj` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** All parameters are given in an object (optional, default `{}`)
 
     *   `obj.peerServHost` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** The PeerServ host you want to connect to (optional, default `'https://staging-peerserv.babbage.systems'`)
     *   `obj.dojoHost` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** The Dojo to use for UTXO management (optional, default `'https://staging-dojo.babbage.systems'`)
     *   `obj.clientPrivateKey` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** A private key to use for mutual authentication with Authrite. (Optional - Defaults to Babbage signing strategy).
-    *   `obj.defaultTokenValue`  
+    *   `obj.defaultTokenValue`   (optional, default `1`)
     *   `obj.protocolID`  
     *   `obj.protocolKeyID`  
     *   `obj.protocolBasketName`  
@@ -86,6 +89,17 @@ Extends the Tokenator class to enable sending PushDrop tokens with custom instru
 
     *   `data.recipient` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Who this data should be sent to (optional, default `'self'`)
 
+#### redeemPushDropToken
+
+Redeems a PushDrop Token by Spending the UTXO
+
+##### Parameters
+
+*   `token` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** the token object returned from createPushDropToken
+*   `description` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** description of this action (optional, default `` `Delete a ${this.protocolID} token` ``)
+
+Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** the result of the createAction call
+
 #### sendPushDropToken
 
 Sends a PushDrop token to a PeerServ recipient
@@ -98,6 +112,6 @@ Sends a PushDrop token to a PeerServ recipient
 
 #### receivePushDropTokens
 
-Recieves incoming PushDrop tokens
+Receives incoming PushDrop tokens
 
 Returns **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)** An array indicating the tokens received

@@ -1,5 +1,6 @@
 const Tokenator = require('@babbage/tokenator')
-const BabbageSDK = require('@babbage/sdk')
+const BabbageSDK = require('@babbage/wrapped-sdk') // TODO: Add check to support both node and browser env
+// const BabbageSDK = require('@babbage/sdk')
 const Ninja = require('utxoninja')
 const pushdrop = require('pushdrop')
 
@@ -15,7 +16,7 @@ class PushDropTokenator extends Tokenator {
     peerServHost = 'https://staging-peerserv.babbage.systems',
     dojoHost = 'https://staging-dojo.babbage.systems',
     clientPrivateKey,
-    defaultTokenValue,
+    defaultTokenValue = 1,
     protocolID,
     protocolKeyID,
     protocolBasketName,
@@ -96,6 +97,42 @@ class PushDropTokenator extends Tokenator {
   }
 
   /**
+   * Redeems a PushDrop Token by Spending the UTXO
+   * @param {Object} token the token object returned from createPushDropToken
+   * @param {string} [description] description of this action
+   * @returns {Object} the result of the createAction call
+   */
+  async redeemPushDropToken (token, description = `Delete a ${this.protocolID} token`) {
+    const DEFAULT_OUTPUT_INDEX = 0
+    const unlockingScript = await pushdrop.redeem({
+      protocolID: this.protocolID,
+      keyID: this.protocolKeyID,
+      prevTxId: token.body.transaction.txid,
+      outputIndex: DEFAULT_OUTPUT_INDEX, // TODO: Re-evaluate output indexing system
+      lockingScript: token.body.transaction.outputs[DEFAULT_OUTPUT_INDEX].customInstructions.outputScript,
+      outputAmount: token.body.transaction.outputs[DEFAULT_OUTPUT_INDEX].satoshis
+    })
+
+    // Create a new tx which redeems the token and unlocks the Bitcoin
+    const result = await BabbageSDK.createAction({
+      description,
+      inputs: {
+        [token.body.transaction.txid]: {
+          ...token.body.transaction,
+          outputIndex: DEFAULT_OUTPUT_INDEX,
+          outputsToRedeem: [{
+            index: DEFAULT_OUTPUT_INDEX,
+            unlockingScript,
+            spendingDescription: `Redeems a ${this.protocolID} token`
+          }]
+        }
+      }
+    })
+
+    return result
+  }
+
+  /**
    * Sends a PushDrop token to a PeerServ recipient
    * @param {Object} data The data object with any data fields to send
    * @param {String} [data.recipient='self'] Who this data should be sent to
@@ -106,7 +143,7 @@ class PushDropTokenator extends Tokenator {
   }
 
   /**
-   * Recieves incoming PushDrop tokens
+   * Receives incoming PushDrop tokens
    * @returns {Array} An array indicating the tokens received
    */
   async receivePushDropTokens () {
@@ -127,7 +164,7 @@ class PushDropTokenator extends Tokenator {
       return ninja
     }
 
-    // Recieve tokens using submitDirectTransaction
+    // Receive tokens using submitDirectTransaction
     const messagesProcessed = []
     const tokensReceived = []
     for (const [i, message] of messages.entries()) {
