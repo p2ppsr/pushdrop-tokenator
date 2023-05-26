@@ -103,25 +103,24 @@ class PushDropTokenator extends Tokenator {
    * @returns {Object} the result of the createAction call
    */
   async redeemPushDropToken (token, description = `Delete a ${this.protocolID} token`) {
-    const DEFAULT_OUTPUT_INDEX = 0
     const unlockingScript = await pushdrop.redeem({
       protocolID: this.protocolID,
       keyID: this.protocolKeyID,
-      prevTxId: token.body.transaction.txid,
-      outputIndex: DEFAULT_OUTPUT_INDEX, // TODO: Re-evaluate output indexing system
-      lockingScript: token.body.transaction.outputs[DEFAULT_OUTPUT_INDEX].customInstructions.outputScript,
-      outputAmount: token.body.transaction.outputs[DEFAULT_OUTPUT_INDEX].satoshis
+      prevTxId: token.txid,
+      outputIndex: token.outputIndex,
+      lockingScript: token.lockingScript,
+      outputAmount: token.satoshis
     })
 
     // Create a new tx which redeems the token and unlocks the Bitcoin
     const result = await BabbageSDK.createAction({
       description,
       inputs: {
-        [token.body.transaction.txid]: {
-          ...token.body.transaction,
-          outputIndex: DEFAULT_OUTPUT_INDEX,
+        [token.txid]: {
+          ...token,
+          outputIndex: token.outputIndex,
           outputsToRedeem: [{
-            index: DEFAULT_OUTPUT_INDEX,
+            index: token.outputIndex,
             unlockingScript,
             spendingDescription: `Redeems a ${this.protocolID} token`
           }]
