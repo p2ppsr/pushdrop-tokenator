@@ -1,7 +1,7 @@
 const Tokenator = require('@babbage/tokenator')
 const BabbageSDK = require('@babbage/wrapped-sdk') // TODO: Add check to support both node and browser env
 // const BabbageSDK = require('@babbage/sdk')
-const Ninja = require('utxoninja')
+const { Ninja } = require('ninja-base')
 const pushdrop = require('pushdrop')
 
 /**
