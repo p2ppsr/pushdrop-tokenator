@@ -25,7 +25,7 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
-    "@babbage/tokenator": "^0.1.11",
+    "@babbage/tokenator": "^0.1.12",
     "@babbage/wrapped-sdk": "^0.1.1",
     "ninja-base": "^0.2.115",
     "pushdrop": "^0.1.31"
