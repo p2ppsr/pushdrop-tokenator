@@ -27,7 +27,7 @@
   "dependencies": {
     "@babbage/tokenator": "^0.1.12",
     "@babbage/wrapped-sdk": "^0.1.2",
-    "ninja-base": "^0.2.116",
+    "ninja-base": "^0.2.119",
     "pushdrop": "^0.1.31"
   }
 }

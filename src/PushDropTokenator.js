@@ -82,12 +82,12 @@ class PushDropTokenator extends Tokenator {
           vout: 0,
           satoshis: this.defaultTokenValue,
           basket: this.protocolBasketName,
-          customInstructions: {
+          customInstructions: JSON.stringify({
             outputScript: bitcoinOutputScript,
             sender,
             protocolID: this.protocolID,
             keyID: this.protocolKeyID
-          }
+          })
         }]
       },
       amount: data.amount
@@ -175,15 +175,17 @@ class PushDropTokenator extends Tokenator {
             throw e
           }
 
+          const customInstructions = JSON.parse(out.customInstructions)
+
           // Derive the lockingPublicKey
           const ownerKey = await BabbageSDK.getPublicKey({
-            protocolID: out.customInstructions.protocolID,
-            keyID: out.customInstructions.keyID,
-            counterparty: out.customInstructions.sender,
+            protocolID: customInstructions.protocolID,
+            keyID: customInstructions.keyID,
+            counterparty: customInstructions.sender,
             forSelf: true
           })
           const result = pushdrop.decode({
-            script: out.customInstructions.outputScript
+            script: customInstructions.outputScript
           })
 
           // Make sure the derived ownerKey and lockingPublicKey match
@@ -201,11 +203,7 @@ class PushDropTokenator extends Tokenator {
           amount: this.defaultTokenValue,
           transaction: tokens[i].transaction
         })
-        if (result.status !== 'success') {
-          const e = new Error('Token not processed')
-          e.code = 'ERR_TOKEN_NOT_PROCESSED'
-          throw e
-        }
+
         tokensReceived.push(result)
         messagesProcessed.push(message.messageId)
 
@@ -216,6 +214,20 @@ class PushDropTokenator extends Tokenator {
         console.error(e)
       }
     }
+  }
+
+  /**
+   * Helper function for listing tokens in a Dojo basket
+   * @returns {object[]} - all tokens from the current basket
+   */
+  async listTokensInBasket () {
+    return await BabbageSDK.getTransactionOutputs({
+      // The name of the basket where the tokens are kept
+      basket: this.protocolBasketName,
+      // Only get tokens that are active on the list, not already spent
+      spendable: true,
+      includeEnvelope: true
+    })
   }
 }
 module.exports = PushDropTokenator
