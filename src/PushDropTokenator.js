@@ -146,6 +146,12 @@ class PushDropTokenator extends Tokenator {
    */
   async receivePushDropTokens () {
     const messages = await this.listMessages({ messageBox: this.protocolMessageBox })
+
+    // Just return if there is no new messages to decrypt
+    if (!messages || messages.length === 0) {
+      return []
+    }
+
     const tokens = messages.map(x => JSON.parse(x.body))
 
     // Figure out what the signing strategy should be
