@@ -212,14 +212,13 @@ class PushDropTokenator extends Tokenator {
 
         tokensReceived.push(result)
         messagesProcessed.push(message.messageId)
-
-        // Acknowledge the token(s) received
-        await this.acknowledgeMessage({ messageIds: messagesProcessed })
-        return tokensReceived
       } catch (e) {
         console.error(e)
       }
     }
+    // Acknowledge the token(s) received
+    await this.acknowledgeMessage({ messageIds: messagesProcessed })
+    return tokensReceived
   }
 
   /**
