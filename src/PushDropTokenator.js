@@ -217,7 +217,10 @@ class PushDropTokenator extends Tokenator {
       }
     }
     // Acknowledge the token(s) received
-    await this.acknowledgeMessage({ messageIds: messagesProcessed })
+    if (messagesProcessed.length > 0) {
+      await this.acknowledgeMessage({ messageIds: messagesProcessed })
+    }
+
     return tokensReceived
   }
 
