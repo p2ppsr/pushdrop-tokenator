@@ -35,10 +35,11 @@ class PushDropTokenator extends Tokenator {
 
   /**
    * @param {Object} data The data object with any data fields to send
-   * @param {String} [data.recipient='self'] Who this data should be sent to
+   * @param {string} [data.recipient='self'] Who this data should be sent to
+   * @param {string[]} [tags] Metadata for the output being created as part of the token
    * @returns
    */
-  async createPushDropToken (data) {
+  async createPushDropToken (data, tags) {
     if (!data.recipient) {
       data.recipient = 'self'
     }
@@ -66,7 +67,9 @@ class PushDropTokenator extends Tokenator {
       outputs: [{
         satoshis: Number(this.defaultTokenValue),
         script: bitcoinOutputScript,
-        description: `New ${this.protocolID} token`
+        description: `New ${this.protocolID} token`,
+        basket: this.protocolBasketName,
+        tags
       }],
       description: `Create a ${this.protocolID}  token`
     })
@@ -132,11 +135,12 @@ class PushDropTokenator extends Tokenator {
 
   /**
    * Sends a PushDrop token to a PeerServ recipient
-   * @param {Object} data The data object with any data fields to send
-   * @param {String} [data.recipient='self'] Who this data should be sent to
+   * @param {object} data The data object with any data fields to send
+   * @param {string} [data.recipient='self'] Who this data should be sent to
+   * @param {string[]} [tags] Metadata for the output being created as part of the token
    */
-  async sendPushDropToken (data) {
-    const token = await this.createPushDropToken(data)
+  async sendPushDropToken (data, tags) {
+    const token = await this.createPushDropToken(data, tags)
     return await this.sendMessage(token)
   }
 
@@ -203,6 +207,7 @@ class PushDropTokenator extends Tokenator {
         }
 
         // Use Ninja to submit the validated transaction to Dojo
+        // Note: submitDirectTransaction does not currently support sending in additional tags.
         const result = await getLib().submitDirectTransaction({
           senderIdentityKey: message.sender,
           note: `${this.protocolID} token`,
@@ -226,16 +231,22 @@ class PushDropTokenator extends Tokenator {
 
   /**
    * Helper function for listing tokens in a Dojo basket
+   * @param {string[]} tags - output tags for filtering pushdrop tokens in the protocol basket
+   * @param {string} [tagQueryMode] - determines if results should match all tags or any of the tags
    * @returns {object[]} - all tokens from the current basket
    */
-  async listTokensInBasket () {
-    return await BabbageSDK.getTransactionOutputs({
+  async listTokensInBasket (tags, tagQueryMode) {
+    const tokens = await BabbageSDK.getTransactionOutputs({
       // The name of the basket where the tokens are kept
       basket: this.protocolBasketName,
       // Only get tokens that are active on the list, not already spent
       spendable: true,
-      includeEnvelope: true
+      includeEnvelope: true,
+      order: 'descending',
+      tags,
+      tagQueryMode
     })
+    return tokens
   }
 }
 module.exports = PushDropTokenator
