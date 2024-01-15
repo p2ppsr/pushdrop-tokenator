@@ -88,6 +88,7 @@ class PushDropTokenator extends Tokenator {
           customInstructions: JSON.stringify({
             outputScript: bitcoinOutputScript,
             sender,
+            recipient: data.recipient,
             protocolID: this.protocolID,
             keyID: this.protocolKeyID
           })
