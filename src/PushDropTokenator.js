@@ -94,7 +94,7 @@ class PushDropTokenator extends Tokenator {
           })
         }]
       },
-      amount: data.amount
+      amount: this.defaultTokenValue
     }
     return data
   }
@@ -110,9 +110,9 @@ class PushDropTokenator extends Tokenator {
       protocolID: this.protocolID,
       keyID: this.protocolKeyID,
       prevTxId: token.txid,
-      outputIndex: token.outputIndex,
-      lockingScript: token.lockingScript,
-      outputAmount: token.satoshis
+      outputIndex: token.vout,
+      lockingScript: token.outputScript,
+      outputAmount: token.amount
     })
 
     // Create a new tx which redeems the token and unlocks the Bitcoin
@@ -120,10 +120,19 @@ class PushDropTokenator extends Tokenator {
       description,
       inputs: {
         [token.txid]: {
-          ...token,
-          outputIndex: token.outputIndex,
+          ...token.envelope,
+          inputs: typeof token.envelope.inputs === 'string'
+            ? JSON.parse(token.envelope.inputs)
+            : token.envelope.inputs,
+          mapiResponses: typeof token.envelope.mapiResponses === 'string'
+            ? JSON.parse(token.envelope.mapiResponses)
+            : token.envelope.mapiResponses,
+          proof: typeof token.envelope.proof === 'string'
+            ? JSON.parse(token.envelope.proof)
+            : token.envelope.proof,
+          outputIndex: token.vout,
           outputsToRedeem: [{
-            index: token.outputIndex,
+            index: token.vout,
             unlockingScript,
             spendingDescription: `Redeems a ${this.protocolID} token`
           }]
@@ -243,6 +252,7 @@ class PushDropTokenator extends Tokenator {
       // Only get tokens that are active on the list, not already spent
       spendable: true,
       includeEnvelope: true,
+      includeCustomInstructions: true,
       order: 'descending',
       tags,
       tagQueryMode
