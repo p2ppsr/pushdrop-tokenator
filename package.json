@@ -1,6 +1,6 @@
 {
   "name": "pushdrop-tokenator",
-  "version": "0.1.26",
+  "version": "0.1.27",
   "description": "Tokenator for sending pushdrop tokens P2P",
   "main": "src/PushDropTokenator.js",
   "scripts": {
